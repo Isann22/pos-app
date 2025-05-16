@@ -1,3 +1,4 @@
+gunakan alphine untuk trnasisis :
 @if ($showCashPaymentModal)
     <div
         class="fixed inset-0 backdrop-blur-md flex items-center justify-center z-50 p-4 
@@ -12,8 +13,11 @@
                 <h3 class="text-lg font-semibold text-gray-800">Pembayaran Tunai</h3>
                 <button wire:click="$set('showCashPaymentModal', false)"
                     class="text-gray-500 hover:text-gray-700 
-                         transition-colors duration-200">
-                    &times;
+                         transition-colors duration-200 cursor-pointer">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M6 18L18 6M6 6l12 12" />
+                    </svg>
                 </button>
             </div>
 
@@ -39,7 +43,7 @@
                 <div class="grid grid-cols-2 gap-4">
                     <div class="transition-all duration-200 ease-in-out">
                         <p class="text-sm text-gray-600">Total Belanja</p>
-                        <p class="text-xl font-bold text-gray-800">{{ $total }}</p>
+                        <p class="text-xl font-bold text-gray-800">{{ format_currency($total) }}</p>
                     </div>
                     <div class="transition-all duration-200 ease-in-out">
                         <p class="text-sm text-gray-600">Kembalian</p>

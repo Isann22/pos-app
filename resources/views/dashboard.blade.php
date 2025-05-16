@@ -14,11 +14,9 @@
 
             </div>
             <h1 class="text-4xl md:text-5xl font-bold text-floral-dark mb-3">
-                <span class="text-floral-primary">🌸</span> Florist POS
+                <span class="text-floral-primary">🌸</span> Khalisa FLorist
             </h1>
-            <p class="text-floral-leaf max-w-md mx-auto">
-                Sistem kasir modern untuk penjualan bouquet, bucket, dan rangkaian bunga
-            </p>
+
         </div>
 
         <!-- Main Cards Grid -->

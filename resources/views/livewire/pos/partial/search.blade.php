@@ -8,7 +8,7 @@
        </div>
 
        <!-- Search Input -->
-       <input type="text" wire:model.live.debounce.300ms="search" placeholder="Cari produk bunga..."
+       <input type="text" wire:model.live.debounce.400ms="search" placeholder="Cari produk bunga..."
            class="w-full border border-orange-200 rounded-full py-2.5 px-10 focus:outline-none focus:ring-2 focus:ring-orange-300 focus:border-transparent placeholder-orange-300">
 
        <!-- Clear Button -->

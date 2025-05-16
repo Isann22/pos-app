@@ -5,8 +5,10 @@
 @plugin "flowbite/plugin";
 @source "../../node_modules/flowbite";
 
+@source '../../vendor/masmerise/livewire-toaster/resources/views/*.blade.php'
 @source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
 @source '../../storage/framework/views/*.php';
+
 
 
 

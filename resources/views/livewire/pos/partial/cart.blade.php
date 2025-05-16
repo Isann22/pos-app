@@ -1,5 +1,5 @@
 <aside id="right-sidebar"
-    class="fixed top-0 right-0 z-40 w-60 h-screen pt-24 sm:pt-6 sidebar sidebar-right bg-gradient-to-b from-orange-50 to-amber-50 border-l border-orange-100">
+    class="fixed top-0 right-0 z-40 w-60 h-screen pt-24 sm:pt-10 sidebar sidebar-right bg-gradient-to-b from-orange-50 to-amber-50 border-l border-orange-100">
 
     <div class="h-full flex flex-col">
         <div class="flex items-center justify-center gap-4 pb-4 text-orange-400">
@@ -42,15 +42,15 @@
                                         +
                                     </button>
                                 </div>
-                                <span class="font-medium text-orange-700">{{ $item['total_price'] }}</span>
+                                <span
+                                    class="font-medium text-orange-700">{{ format_currency($item['total_price']) }}</span>
                             </div>
                         </div>
                     @endforeach
                 </div>
             @else
                 <div class="text-center py-8 text-orange-400">
-
-                    <p class="mt-2 text-sm"> kosong</p>
+                    <p class="mt-2 text-sm">kosong</p>
                 </div>
             @endif
         </div>
@@ -58,15 +58,27 @@
         <div class="p-4 bg-white/80 border-t border-orange-100">
             <div class="flex justify-between mb-2">
                 <span class="text-orange-600">Total:</span>
-                <span class="font-medium text-orange-700">{{ $total }}</span>
+                <span class="font-medium text-orange-700">{{ format_currency($total) }}</span>
             </div>
-            <button wire:click="openPaymentModal"
-                class="w-full bg-gradient-to-r from-orange-500 to-amber-500 text-white py-2 rounded-lg font-medium hover:from-orange-600 hover:to-amber-600 transition-colors disabled:opacity-50"
-                @if (count($cart) === 0) disabled @endif>
-                Checkout
-            </button>
+
+            @if (count($cart) > 0)
+                <div class="flex gap-2 mb-2">
+                    <button wire:click="clearCart"
+                        class="flex-1 cursor-pointer bg-white border border-orange-300 text-orange-600 py-2 rounded-lg font-medium hover:bg-orange-50 transition-colors">
+                        Bersihkan
+                    </button>
+                    <button wire:click="openPaymentModal"
+                        class="flex-1 cursor-pointer bg-gradient-to-r from-orange-500 to-amber-500 text-white py-2 rounded-lg font-medium hover:from-orange-600 hover:to-amber-600 transition-colors">
+                        Checkout
+                    </button>
+                </div>
+            @else
+                <button wire:click="openPaymentModal"
+                    class="w-full cursor-not-allowed bg-gradient-to-r from-orange-500 to-amber-500 text-white py-2 rounded-lg font-medium hover:from-orange-600 hover:to-amber-600 transition-colors disabled:opacity-50"
+                    disabled>
+                    Checkout
+                </button>
+            @endif
         </div>
     </div>
-
-
 </aside>

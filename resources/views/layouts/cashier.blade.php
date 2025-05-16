@@ -8,7 +8,7 @@
     <title> {{ $title ?? 'Page Title' }}</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     @livewireStyles
-
+    <x-toaster-hub />
     <style>
         .transition-all {
             transition: all 0.3s ease;
