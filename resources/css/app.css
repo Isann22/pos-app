@@ -1,0 +1,65 @@
+@import 'tailwindcss';
+
+@plugin '@tailwindcss/forms';
+
+@plugin "flowbite/plugin";
+@source "../../node_modules/flowbite";
+
+@source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
+@source '../../storage/framework/views/*.php';
+
+
+
+@theme {
+  --font-sans:
+    Figtree, ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji',
+    'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+  --font-sacramento:
+    Sacramento, cursive;
+  --color-floral-primary: 255 123 51;  /* #FF7B33 */
+  --color-floral-light: 255 237 213;   /* #FFEDD5 */
+  --color-floral-dark: 230 92 26;      /* #E65C1A */
+  --color-floral-leaf: 90 143 123;     /* #5A8F7B */
+  --color-floral-petal: 255 167 196;   /* #FFA7C4 */
+
+  /* Florist Gradients */
+  --gradient-floral: linear-gradient(
+    135deg,
+    rgb(var(--color-floral-light)) 0%,
+    rgb(var(--color-floral-petal)/0.2) 100%
+  );
+}
+
+/*
+  The default border color has changed to `currentcolor` in Tailwind CSS v4,
+  so we've added these compatibility styles to make sure everything still
+  looks the same as it did with Tailwind CSS v3.
+
+  If we ever want to remove these styles, we need to add an explicit border
+  color utility to any element that depends on these defaults.
+*/
+@layer base {
+  *,
+  ::after,
+  ::before,
+  ::backdrop,
+  ::file-selector-button {
+    border-color: var(--color-gray-200, currentcolor);
+  }
+   .floral-card {
+    @apply bg-white/80 backdrop-blur-md rounded-2xl shadow-lg border border-floral-light;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+    &:hover {
+      @apply shadow-xl border-floral-primary/30;
+      transform: translateY(-2px);
+    }
+  }
+
+  /* Florist Badge */
+  .floral-badge {
+    @apply inline-flex items-center px-3 py-1 rounded-full text-xs font-medium;
+    background-color: rgb(var(--color-floral-primary)/0.1);
+    color: rgb(var(--color-floral-dark));
+  }
+}
