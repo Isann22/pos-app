@@ -7,8 +7,11 @@ use Livewire\Component;
 use App\Models\Category;
 use Livewire\WithPagination;
 use App\Services\CartService;
+use App\Services\OrderService;
 use Livewire\Attributes\Title;
 use Masmerise\Toaster\Toaster;
+use Illuminate\Support\Facades\Auth;
+
 
 class Pos extends Component
 {
@@ -29,15 +32,24 @@ class Pos extends Component
     public $errorMessage = '';
     public $successMessage = '';
 
-    protected $listeners = ['cartUpdated' => 'saveCartToSession'];
+    protected $listeners = ['print-receipt' => 'handlePrintReceipt'];
 
-    //Cart
+
+    protected OrderService $orderService;
+
+
     protected CartService $cartService;
 
-    public function boot(CartService $cartService)
+
+    public function boot(CartService $cartService, OrderService $orderService)
     {
         $this->cartService = $cartService;
+        $this->orderService = $orderService;
     }
+
+    /* --------------------------
+    |  Cart Methods
+    ---------------------------*/
     public function addToCart(Product $product)
     {
         try {
@@ -46,7 +58,6 @@ class Pos extends Component
             }
             $this->cartService->addToCart($product);
 
-            $this->dispatch('cartUpdated');
             Toaster::success('Produk berhasil ditambahkan ke keranjang');
         } catch (\Exception $e) {
             Toaster::error($e->getMessage());
@@ -58,7 +69,6 @@ class Pos extends Component
     {
         try {
             $this->cartService->removeFromCart($index);
-            $this->dispatch('cartUpdated');
             Toaster::info('Produk dihapus dari keranjang');
         } catch (\Exception $e) {
             Toaster::error(
@@ -72,7 +82,6 @@ class Pos extends Component
     {
         try {
             $this->cartService->updateQuantity($index, $change);
-            $this->dispatch('cartUpdated');
         } catch (\Exception $e) {
             Toaster::error(
                 $e->getMessage()
@@ -85,7 +94,6 @@ class Pos extends Component
     {
         try {
             $this->cartService->clearCart();
-            $this->dispatch('cartUpdated');
             Toaster::info("keranjang berhasil dikosongkan");
         } catch (\Exception $e) {
             Toaster::error(
@@ -94,6 +102,10 @@ class Pos extends Component
             $this->addError('cart', $e->getMessage());
         }
     }
+
+    /* --------------------------
+    |  Payment Methods
+    ---------------------------*/
 
     public function openPaymentModal()
     {
@@ -107,17 +119,18 @@ class Pos extends Component
 
     public function processPaymentType()
     {
-        if ($this->paymentType === 'cash') {
-            $this->showPaymentModal = false;
-            $this->showCashPaymentModal = true;
-            $this->cashGiven = $this->cartService->getTotal();
-            $this->calculateChange();
-        } else {
-            $this->processNonCashPayment();
-        }
+        $this->paymentType === 'cash'
+            ? $this->prepareCashPayment()
+            : $this->processNonCashPayment();
     }
 
-
+    protected function prepareCashPayment()
+    {
+        $this->showPaymentModal = false;
+        $this->showCashPaymentModal = true;
+        $this->cashGiven = $this->cartService->getTotal();
+        $this->calculateChange();
+    }
 
     public function processCashPayment()
     {
@@ -127,12 +140,35 @@ class Pos extends Component
             return;
         }
 
-        $this->showCashPaymentModal = false;
-        $this->cashGiven = 0;
-        $this->changeAmount = 0;
-        $this->clearCart();
+
+        try {
+            $order = $this->orderService->processCashOrder(
+                $this->cartService->getCart(),
+                $this->cashGiven,
+                Auth::user()->name
+            );
+
+            $this->completePayment($order);
+        } catch (\Exception $e) {
+            $this->errorMessage = 'Pembayaran gagal';
+            Toaster::error($this->errorMessage);
+        }
     }
 
+    protected function completePayment($order)
+    {
+        $this->resetPaymentModal();
+        $this->cartService->clearCart();
+        $this->dispatch('print-receipt', orderId: $order->id);
+        Toaster::success("Transaksi #" . substr($order->id, 0, 8) . " berhasil");
+    }
+
+
+
+
+    /* --------------------------
+    |  helper
+    ---------------------------*/
     public function calculateChange()
     {
         if (is_numeric($this->cashGiven)) {
@@ -142,8 +178,21 @@ class Pos extends Component
         }
     }
 
+    public function resetPaymentModal()
+    {
+        $this->reset([
+            'showPaymentModal',
+            'showCashPaymentModal',
+            'paymentType',
+            'cashGiven',
+            'changeAmount',
+            'errorMessage'
+        ]);
+    }
 
-
+    /* --------------------------
+    |  Filter Methods
+    ---------------------------*/
     public function filterByCategory($categoryId)
     {
         $this->selectedCategoryId = $categoryId;
@@ -153,6 +202,8 @@ class Pos extends Component
     {
         $this->selectedCategoryId = null;
     }
+
+    public function handlePrintReceipt($orderId) {}
 
 
     #[Title('Sales')]

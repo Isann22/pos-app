@@ -67,7 +67,7 @@ gunakan alphine untuk trnasisis :
             <!-- Footer -->
             <div class="border-t px-6 py-4 bg-gray-50 rounded-b-lg">
                 <button wire:click="processCashPayment"
-                    class="w-full bg-orange-500 text-white py-3 rounded-lg font-medium hover:bg-orange-600 
+                    class="cursor-pointer w-full bg-orange-500 text-white py-3 rounded-lg font-medium hover:bg-orange-600 
                            transition-all duration-300 ease-in-out
                            @if ($changeAmount < 0 || $cashGiven <= 0) opacity-50 cursor-not-allowed @endif"
                     @if ($changeAmount < 0) disabled @endif>

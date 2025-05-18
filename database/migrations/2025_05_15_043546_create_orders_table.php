@@ -12,11 +12,14 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('orders', function (Blueprint $table) {
-            $table->id();
-            $table->unsignedBigInteger('product_id')->nullable();
-            $table->integer('qty')->nullable()->default(1);
+            $table->uuid('id')->primary();
+            $table->decimal('total', 12, 2);
+            $table->enum('payment_method', ['cash', 'qris', 'debit_card', 'credit_card', 'e_wallet']);
+            $table->decimal('cash_received', 12, 2)->nullable();
+            $table->decimal('change', 12, 2)->nullable();
+            $table->string('cashier_name');
+            $table->timestamp('completed_at')->nullable();
             $table->timestamps();
-            $table->foreign('product_id')->references('id')->on('products')->onDelete('cascade');
         });
     }
 
