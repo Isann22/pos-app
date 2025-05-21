@@ -9,6 +9,8 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     @livewireStyles
     <x-toaster-hub />
+    <script type="text/javascript" src="https://app.sandbox.midtrans.com/snap/snap.js"
+        data-client-key="{{ env('MIDTRANS_CLIENT_KEY') }}"></script>
     <style>
         .transition-all {
             transition: all 0.3s ease;
@@ -69,30 +71,26 @@
 <body class="bg-base-200 min-h-screen">
 
 
-
-
     <main class="flex-1 pt-16 sm:ml-64 sm:mr-80 overflow-auto bg-white">
         {{ $slot }}
-
     </main>
 
 
-    @livewireScripts
+
 
     <script src="https://cdn.jsdelivr.net/npm/flowbite@3.1.2/dist/flowbite.min.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
 
-            // Toggle Right Sidebar
             const toggleRightSidebar = document.getElementById('toggle-right-sidebar');
             const rightSidebar = document.getElementById('right-sidebar');
 
-            // Overlay for mobile
+
             const overlay = document.createElement('div');
             overlay.className = 'fixed inset-0 dark:bg-gray-900 opacity-50 z-30 hidden';
             document.body.appendChild(overlay);
 
-            // Function to close sidebars
+
             function closeSidebars() {
                 rightSidebar.classList.remove('open');
                 overlay.classList.add('hidden');
@@ -100,7 +98,7 @@
             }
 
 
-            // Toggle right sidebar
+
             toggleRightSidebar.addEventListener('click', function() {
                 rightSidebar.classList.toggle('open');
 
@@ -108,10 +106,10 @@
                 document.body.classList.toggle('overflow-hidden', rightSidebar.classList.contains('open'));
             });
 
-            // Close sidebar when clicking overlay
+
             overlay.addEventListener('click', closeSidebars);
 
-            // Close sidebar when pressing Escape key
+
             document.addEventListener('keydown', function(e) {
                 if (e.key === 'Escape') {
                     closeSidebars();

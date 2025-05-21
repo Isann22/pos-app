@@ -4,7 +4,7 @@
     x-transition:leave-end="opacity-0"
     class="fixed inset-0 backdrop-blur-md bg-white/10 flex items-center justify-center z-50 p-4">
 
-    <!-- Modal Content with its own transition -->
+
     <div x-transition:enter="transition ease-out duration-400 delay-100"
         x-transition:enter-start="opacity-0 transform translate-y-4"
         x-transition:enter-end="opacity-100 transform translate-y-0"
@@ -30,9 +30,8 @@
                 <p class="text-2xl font-bold text-orange-600">{{ format_currency($total) }}</p>
             </div>
 
-            <!-- Pilihan Pembayaran -->
             <div class="space-y-3">
-                <!-- Tunai -->
+
                 <button wire:click="$set('paymentType', 'cash')"
                     class="cursor-pointer w-full p-4 border rounded-lg flex items-center justify-start space-x-3
                         transition-all duration-300 ease-in-out hover:shadow-md hover:border-orange-300
@@ -47,7 +46,7 @@
                     <span class="font-medium">Tunai</span>
                 </button>
 
-                <!-- Non-Tunai -->
+
                 <button wire:click="$set('paymentType', 'non-cash')"
                     class="cursor-pointer w-full p-4 border rounded-lg flex items-center justify-start space-x-3
                         transition-all duration-300 ease-in-out hover:shadow-md hover:border-orange-300

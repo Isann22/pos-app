@@ -38,7 +38,7 @@
                         </div>
                     </div>
                     <div class="mt-auto">
-                        <a href="/sales" wire:navigate class="btn-primary w-full md:w-auto">
+                        <a href="{{ route('cashier') }}" class="btn-primary w-full md:w-auto">
                             Buka Kasir
                             <svg class="w-4 h-4 ml-2 inline" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"

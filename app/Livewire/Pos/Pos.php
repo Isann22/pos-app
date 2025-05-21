@@ -10,6 +10,7 @@ use App\Services\CartService;
 use App\Services\OrderService;
 use Livewire\Attributes\Title;
 use Masmerise\Toaster\Toaster;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 
 
@@ -21,23 +22,24 @@ class Pos extends Component
     public $selectedCategoryId = null;
 
 
-
     public $showPaymentModal = false;
     public $showCashPaymentModal = false;
+    public $showNonCashPaymentModal = false;
     public $paymentType = 'cash';
     public $cashGiven = 0;
     public $changeAmount = 0;
+    public $snapToken = "";
+    public $status = "";
+
 
 
     public $errorMessage = '';
-    public $successMessage = '';
+
 
     protected $listeners = ['print-receipt' => 'handlePrintReceipt'];
 
 
     protected OrderService $orderService;
-
-
     protected CartService $cartService;
 
 
@@ -47,8 +49,9 @@ class Pos extends Component
         $this->orderService = $orderService;
     }
 
+
     /* --------------------------
-    |  Cart Methods
+    |  Cart
     ---------------------------*/
     public function addToCart(Product $product)
     {
@@ -94,17 +97,16 @@ class Pos extends Component
     {
         try {
             $this->cartService->clearCart();
-            Toaster::info("keranjang berhasil dikosongkan");
         } catch (\Exception $e) {
             Toaster::error(
-                $e->getMessage()
+                "gagal menghapus item"
             );
             $this->addError('cart', $e->getMessage());
         }
     }
 
     /* --------------------------
-    |  Payment Methods
+    |  Payment 
     ---------------------------*/
 
     public function openPaymentModal()
@@ -121,9 +123,12 @@ class Pos extends Component
     {
         $this->paymentType === 'cash'
             ? $this->prepareCashPayment()
-            : $this->processNonCashPayment();
+            : $this->prepareNonCashPayment();
     }
 
+    /* --------------------------
+    |  Payment Cash
+    ---------------------------*/
     protected function prepareCashPayment()
     {
         $this->showPaymentModal = false;
@@ -131,6 +136,7 @@ class Pos extends Component
         $this->cashGiven = $this->cartService->getTotal();
         $this->calculateChange();
     }
+
 
     public function processCashPayment()
     {
@@ -140,31 +146,56 @@ class Pos extends Component
             return;
         }
 
-
         try {
+            DB::beginTransaction();
+
             $order = $this->orderService->processCashOrder(
                 $this->cartService->getCart(),
                 $this->cashGiven,
                 Auth::user()->name
             );
 
-            $this->completePayment($order);
+
+            $this->resetPaymentModal($order);
+            $this->clearCart();
+            DB::commit();
+            Toaster::success('Pembayaran tunai berhasil diproses');
         } catch (\Exception $e) {
-            $this->errorMessage = 'Pembayaran gagal';
+            DB::rollBack();
+            $this->errorMessage = $e->getMessage();
             Toaster::error($this->errorMessage);
         }
     }
 
-    protected function completePayment($order)
+    /* --------------------------
+    |  Payment Non Cash
+    ---------------------------*/
+    protected function prepareNonCashPayment()
     {
-        $this->resetPaymentModal();
-        $this->cartService->clearCart();
-        $this->dispatch('print-receipt', orderId: $order->id);
-        Toaster::success("Transaksi #" . substr($order->id, 0, 8) . " berhasil");
+        $this->showPaymentModal = false;
+        $this->showNonCashPaymentModal = true;
+        $this->cashGiven = $this->cartService->getTotal();
+        $this->calculateChange();
     }
 
-
-
+    public function processMidtransPayment()
+    {
+        try {
+            DB::beginTransaction();
+            $order = $this->orderService->processMidtransOrder(
+                $this->cartService->getCart(),
+                Auth::user()->name
+            );
+            $this->dispatch('token', token: $order->midtrans_snap_token);
+            $this->status = $order->status;
+            $this->resetPaymentModal($order);
+            $this->clearCart();
+        } catch (\Exception $e) {
+            DB::rollBack();
+            $this->errorMessage = $e->getMessage();
+            Toaster::error($this->errorMessage);
+        }
+    }
 
     /* --------------------------
     |  helper
@@ -183,15 +214,17 @@ class Pos extends Component
         $this->reset([
             'showPaymentModal',
             'showCashPaymentModal',
+            'showNonCashPaymentModal',
             'paymentType',
             'cashGiven',
             'changeAmount',
-            'errorMessage'
+            'errorMessage',
         ]);
     }
 
+
     /* --------------------------
-    |  Filter Methods
+    |  Filter 
     ---------------------------*/
     public function filterByCategory($categoryId)
     {
@@ -206,6 +239,9 @@ class Pos extends Component
     public function handlePrintReceipt($orderId) {}
 
 
+    /* --------------------------
+    |  render
+    ---------------------------*/
     #[Title('Sales')]
     public function render()
     {

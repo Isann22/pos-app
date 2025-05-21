@@ -2,7 +2,7 @@
     class="mt-4  fixed top-0 left-0 z-40 w-52 h-screen pt-20 transition-transform -translate-x-full bg-gradient-to-b from-orange-50 to-amber-50 sm:translate-x-0"
     aria-label="Sidebar">
 
-    <!-- Category Header with Icon -->
+
     <div class="px-4 py-3 border-b border-orange-100 flex items-center bg-orange-50">
         <svg class="w-5 h-5 mr-2 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -11,7 +11,7 @@
         <h3 class="text-orange-700 font-semibold">Filter Kategori</h3>
     </div>
 
-    <!-- Category List -->
+
     <div class="h-full px-2 pb-4 overflow-y-auto mt-2">
         <button wire:click="resetCategoryFilter"
             class="cursor-pointer p-3 text-orange-700 rounded-lg  {{ empty($selectedCategoryId) && empty($selectedCategoryIds) ? 'bg-orange-100 ' : '' }}">
@@ -26,8 +26,6 @@
                     </button>
                 </li>
             @endforeach
-
-            <!-- Add more categories as needed -->
         </ul>
 
         <!-- User Profile Section -->

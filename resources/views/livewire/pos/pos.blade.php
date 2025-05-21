@@ -15,6 +15,10 @@
         @if ($showCashPaymentModal)
             @include('livewire.pos.payment.payment-cash')
         @endif
+
+        @if ($showNonCashPaymentModal)
+            @include('livewire.pos.payment.payment-non-cash')
+        @endif
         <div class="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-3 gap-4">
             @foreach ($products as $product)
                 <div wire:key="{{ $product->id }}"
