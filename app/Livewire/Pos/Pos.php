@@ -190,6 +190,7 @@ class Pos extends Component
             $this->status = $order->status;
             $this->resetPaymentModal($order);
             $this->clearCart();
+            DB::commit();
         } catch (\Exception $e) {
             DB::rollBack();
             $this->errorMessage = $e->getMessage();

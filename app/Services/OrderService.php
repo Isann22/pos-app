@@ -130,6 +130,14 @@ class OrderService
       'transaction_details' => [
         'order_id' => $order->id,
         'gross_amount' => $order->total,
+
+      ],
+      "enabled_payments" => [
+        "gopay",
+        "shopeepay",
+        "bca_va",
+        "bni_va",
+        "akulaku"
       ],
 
       'item_details' => array_map(function ($item) {
@@ -146,7 +154,6 @@ class OrderService
 
     $order->update([
       'midtrans_snap_token' => $snapResponse->token,
-      'payment_url' => $snapResponse->redirect_url,
       'status' => "paid"
     ]);
   }
