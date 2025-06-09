@@ -11,6 +11,7 @@ class Product extends Model
 {
     //
 
+    protected $guarded = [];
     /**
      * Get the category that owns the product
      *

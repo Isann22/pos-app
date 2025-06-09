@@ -3,18 +3,17 @@
 use App\Models\Order;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\RoboFlowContoller;
 
 Route::get('/', function () {
     return view('auth.login');
 });
 
-
+Route::get('/deteksi-uang', [RoboFlowContoller::class, 'liveDetection'])->name("deteksi");
 
 Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
-
-
 
 
 

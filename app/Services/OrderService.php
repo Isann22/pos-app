@@ -137,7 +137,6 @@ class OrderService
         "shopeepay",
         "bca_va",
         "bni_va",
-        "akulaku"
       ],
 
       'item_details' => array_map(function ($item) {

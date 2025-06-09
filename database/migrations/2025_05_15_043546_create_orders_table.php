@@ -18,7 +18,6 @@ return new class extends Migration
             $table->decimal('cash_received', 12, 2)->nullable();
             $table->decimal('change', 12, 2)->nullable();
             $table->string('midtrans_snap_token', 255)->nullable();
-            $table->string('payment_url', 255)->nullable();
             $table->string('cashier_name');
             $table->string('status', 100)->nullable();
             $table->timestamp('completed_at')->nullable();

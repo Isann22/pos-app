@@ -15,7 +15,6 @@ return new class extends Migration
             $table->id();
             $table->uuid('order_id');
             $table->unsignedBigInteger('product_id');
-            $table->string('product_name');
             $table->decimal('price', 12, 2);
             $table->integer('quantity');
             $table->decimal('subtotal', 12, 2);

@@ -79,6 +79,13 @@
                     Checkout
                 </button>
             @endif
+
+            <button
+                class="w-full mt-3 bg-gradient-to-r from-orange-500 to-amber-500 text-white py-2 rounded-lg font-medium hover:from-orange-600 hover:to-amber-600 transition-colors">
+                <a href="{{ route('deteksi') }}">
+                    Deteksi Uang
+                </a>
+            </button>
         </div>
     </div>
 </aside>

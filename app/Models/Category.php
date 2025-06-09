@@ -11,6 +11,7 @@ class Category extends Model
 {
     //
 
+    protected $guarded = [];
     /**
      * Get all of the comments for the Category
      *

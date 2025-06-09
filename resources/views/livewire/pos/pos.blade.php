@@ -25,7 +25,7 @@
                     class="product-card bg-white rounded-xl p-5 shadow-md hover:shadow-lg transition-shadow border border-orange-50 hover:border-orange-100">
                     <div
                         class="w-full h-40 bg-orange-50 rounded-lg mb-4 flex items-center justify-center overflow-hidden">
-                        <img src="{{ Storage::url('images/' . $product->image) }}" "alt="">
+                        <img src="{{ Storage::url($product->image) }}" "alt="">
                     </div>
                     <h3 class="text-orange-800 font-semibold text-center">{{ $product->name }}</h3>
                     <p class="text-sm text-orange-600 text-center mt-1">
