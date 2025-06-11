@@ -31,8 +31,6 @@ class Pos extends Component
     public $snapToken = "";
     public $status = "";
 
-
-
     public $errorMessage = '';
 
 
