@@ -2,10 +2,29 @@
 
 namespace App\Http\Controllers;
 
+use App\Services\RoboflowService;
 use Illuminate\Http\Request;
 
 class RoboFlowContoller extends Controller
 {
+    public function showForm()
+    {
+        return view('detect');
+    }
+
+    public function process(Request $request, RoboflowService $roboflow)
+    {
+        $request->validate([
+            'image' => 'required|image|max:5000'
+        ]);
+
+        $results = $roboflow->detect(
+            $request->file('image')->getRealPath()
+        );
+
+        return response()->json(['data' => $results]);
+    }
+
 
     public function liveDetection()
     {

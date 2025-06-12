@@ -11,9 +11,14 @@ Route::get('/', function () {
 
 Route::get('/deteksi-uang', [RoboFlowContoller::class, 'liveDetection'])->name("deteksi");
 
+
+Route::get('/deteksi', [RoboFlowContoller::class, 'showForm'])->name("form-deteksi");
+Route::post('/detect', [RoboFlowContoller::class, 'process']);
+
 Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
+
 
 
 
